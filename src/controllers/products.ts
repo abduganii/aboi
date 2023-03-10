@@ -34,10 +34,28 @@ export const getProductsbyId = async (req: Request, res: Response) => {
         })
     }
 }
-export const createProducts = async (req: Request, res: Response) => {
+export const getProductsbycategories = async (req: Request, res: Response) => {
     try {
+        const Products = await ProductsModal.find({ categorieId: req.params.id }).populate('categorieId')
+        if (!Products) {
+            return res.send({
+                status: 403,
+                message: 'Products is not found'
+            })
+        }
+        res.send({ Products })
+    } catch (error) {
+        res.status(500).json({
+            message: "No access"
+        })
+    }
+}
+
+export const createProducts = async (req: any, res: Response) => {
+    try {
+
         const newProducts = new ProductsModal({
-            img: req.body.img,
+            img: `/uploads/${req.file.originalname}`,
             name: req.body.name,
             categorieId: req.body.categorie,
             description: req.body.description,

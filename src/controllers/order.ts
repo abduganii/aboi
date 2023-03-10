@@ -54,6 +54,12 @@ buyurtmachi telefon raqami: ${req.body.telnumber}
         // await neworder.save();
 
 
+
+
+
+
+
+
         app.telegram.sendMessage(-1001690827818, text)
 
         res.status(200).send({

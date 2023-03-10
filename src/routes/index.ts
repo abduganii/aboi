@@ -9,6 +9,19 @@ import * as requestController from "../controllers/request";
 import * as orderController from "../controllers/order";
 import * as cantactController from "../controllers/cantact";
 
+import multer from "multer";
+
+const storage = multer.diskStorage({
+  destination: (req, file, cd) => {
+    cd(null, "uploads")
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage })
+
 router
   //auth
   .post('/login', LoginController.login)
@@ -23,7 +36,8 @@ router
   //Products
   .get('/products', productsController.getProducts)
   .get('/products/:id', productsController.getProductsbyId)
-  .post('/products', productsController.createProducts)
+  .get('/productsbycategories/:id', productsController.getProductsbycategories)
+  .post('/products', upload.single('image'), productsController.createProducts)
   .put('/products/:id', productsController.updateProducts)
   .delete('/products/:id', productsController.removeProducts)
   //Request

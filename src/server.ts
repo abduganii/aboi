@@ -13,10 +13,8 @@ mongoose
     .then(() => console.log("mongodb connected"))
     .catch((err): any => console.log(err))
 
-app.get('/', (req, res) => {
-    res.send("ok")
-})
 
+app.use('/uploads', express.static('uploads'));
 app.use(express.json());
 app.use(cors());
 app.use(router)
