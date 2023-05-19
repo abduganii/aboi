@@ -20,14 +20,14 @@ export const getcategorie = async (req: Request, res: Response) => {
 
 export const getcategoriebyId = async (req: Request, res: Response) => {
     try {
-        const categorie = await CategorieModal.find({ _id: req.params.id })
+        const categorie = await CategorieModal.findOne({ _id: req.params.id })
         if (!categorie) {
             return res.send({
                 status: 404,
                 message: 'categorio is not found'
             })
         }
-        res.send({ categorie })
+        res.send(categorie)
     } catch (error) {
         res.status(500).json({
             message: "No access"

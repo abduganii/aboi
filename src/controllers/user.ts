@@ -18,3 +18,22 @@ export const getuser = async (req: Request, res: Response) => {
         })
     }
 }
+
+export const createUser = async (req: Request, res: Response) => {
+    try {
+        const newRequest = new UserModel({
+            name: req.body.name,
+            password: req.body.password,
+
+        })
+        await newRequest.save();
+        res.status(200).send({
+            message: "User Created",
+            data: newRequest
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: "No access"
+        })
+    }
+}

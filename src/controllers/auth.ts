@@ -28,7 +28,7 @@ export const login = async (req: Request, res: Response) => {
             }
         )
 
-        res.send({ user, token })
+        res.status(200).send({ user, token })
 
     } catch (error) {
         return res.send({

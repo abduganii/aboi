@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 import ProductsModal from "../models/product"
-
+const GetterFileuploadClient = require('getter-fileupload-client')
 export const getProducts = async (req: Request, res: Response) => {
     try {
         const Products = await ProductsModal.find().populate('categorieId')
@@ -20,14 +20,14 @@ export const getProducts = async (req: Request, res: Response) => {
 
 export const getProductsbyId = async (req: Request, res: Response) => {
     try {
-        const Products = await ProductsModal.find({ _id: req.params.id }).populate('categorieId')
+        const Products = await ProductsModal.findOne({ _id: req.params.id }).populate('categorieId')
         if (!Products) {
             return res.send({
                 status: 404,
                 message: 'Products is not found'
             })
         }
-        res.send({ Products })
+        res.send(Products)
     } catch (error) {
         res.status(500).json({
             message: "No access"
@@ -55,7 +55,7 @@ export const createProducts = async (req: any, res: Response) => {
     try {
 
         const newProducts = new ProductsModal({
-            img: `/uploads/${req.file.originalname}`,
+            img: req.body.img,
             name: req.body.name,
             categorieId: req.body.categorie,
             description: req.body.description,
@@ -98,9 +98,18 @@ export const updateProducts = async (req: Request, res: Response) => {
     }
 }
 
+const fileUpload = new GetterFileuploadClient('http://localhost:5000')
+
 
 export const removeProducts = async (req: any, res: Response) => {
     try {
+
+        const puduct = await ProductsModal.findOne({ _id: req.params.id })
+
+
+        puduct?.img?.map((e: any) => (
+            fileUpload.removeFile(e)
+        ))
 
         ProductsModal.findByIdAndRemove(
             {
@@ -123,6 +132,7 @@ export const removeProducts = async (req: any, res: Response) => {
                 })
             }
         )
+
 
     } catch (error) {
         console.log(error)

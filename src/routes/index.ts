@@ -8,52 +8,42 @@ import * as productsController from "../controllers/products";
 import * as requestController from "../controllers/request";
 import * as orderController from "../controllers/order";
 import * as cantactController from "../controllers/cantact";
+import chechAuth from "../utils/chechAuth";
 
-import multer from "multer";
-
-const storage = multer.diskStorage({
-  destination: (req, file, cd) => {
-    cd(null, "uploads")
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
-  },
-});
-
-const upload = multer({ storage })
 
 router
   //auth
   .post('/login', LoginController.login)
   //users
   .get('/user', userController.getuser)
+  .post('/user', userController.createUser)
   //categories
   .get('/categories', categoriesController.getcategorie)
   .get('/categories/:id', categoriesController.getcategoriebyId)
-  .post('/categories', categoriesController.createcategorie)
-  .put('/categories/:id', categoriesController.updatecategorie)
-  .delete('/categories/:id', categoriesController.removeCollection)
+  .post('/categories', chechAuth, categoriesController.createcategorie)
+  .put('/categories/:id', chechAuth, categoriesController.updatecategorie)
+  .delete('/categories/:id', chechAuth, categoriesController.removeCollection)
   //Products
   .get('/products', productsController.getProducts)
   .get('/products/:id', productsController.getProductsbyId)
   .get('/productsbycategories/:id', productsController.getProductsbycategories)
-  .post('/products', upload.single('image'), productsController.createProducts)
-  .put('/products/:id', productsController.updateProducts)
-  .delete('/products/:id', productsController.removeProducts)
+  .post('/products', chechAuth, productsController.createProducts)
+  .put('/products/:id', chechAuth, productsController.updateProducts)
+  .delete('/products/:id', chechAuth, productsController.removeProducts)
   //Request
   .get('/request', requestController.getrequest)
   .get('/request/:id', requestController.getrequestbyId)
   .post('/request', requestController.createrequest)
-  .delete('/request/:id', requestController.removerequest)
+  .delete('/request/:id', chechAuth, requestController.removerequest)
   //Order
   .get('/order', orderController.getorder)
   .get('/order/:id', orderController.getorderbyId)
   .post('/order', orderController.createorder)
-  .delete('/order/:id', orderController.removeorder)
+  .delete('/order/:id', chechAuth, orderController.removeorder)
   //Contact
   .get('/cantact', cantactController.getcantact)
-  .post('/cantact', cantactController.createcantact)
-  .put('/cantact/:id', cantactController.updatecantact)
-  .delete('/cantact/:id', cantactController.removeContact)
+  .post('/cantact', chechAuth, cantactController.createcantact)
+  .put('/cantact/:id', chechAuth, cantactController.updatecantact)
+  .delete('/cantact/:id', chechAuth, cantactController.removeContact)
 
 export default router;

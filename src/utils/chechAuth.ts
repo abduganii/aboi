@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import UserModel from "../models/user.js"
 
 export default async (req: any, res: Response, next: any) => {
-    const token: any = (req.headers.token || "");
+    const token: any = (req.headers.aboitoken || "");
 
     if (token) {
         try {
@@ -12,8 +12,8 @@ export default async (req: any, res: Response, next: any) => {
 
 
             if (!user) {
-                return res.status(400).send({
-                    status: 400,
+                return res.status(401).send({
+                    status: 401,
                     message: "Not authention"
                 })
             }
@@ -22,14 +22,14 @@ export default async (req: any, res: Response, next: any) => {
 
             next()
         } catch (error) {
-            return res.send({
-                status: 400,
+            return res.status(401).send({
+                status: 401,
                 message: "Not authention"
             })
         }
     } else {
-        return res.send({
-            status: 400,
+        return res.status(401).send({
+            status: 401,
             message: "Not authention"
         })
     }
