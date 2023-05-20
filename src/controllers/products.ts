@@ -98,7 +98,7 @@ export const updateProducts = async (req: Request, res: Response) => {
     }
 }
 
-const fileUpload = new GetterFileuploadClient('http://localhost:5000')
+const fileUpload = new GetterFileuploadClient('https://storage-oboi.getter.uz')
 
 
 export const removeProducts = async (req: any, res: Response) => {
